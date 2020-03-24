@@ -27,6 +27,6 @@ func (dc *DBRepo) DBConnect(config model.DBConfig) error {
 		log.Printf("Unable to connect DB %v", err)
 		return err
 	}
-	log.Printf("Postgres started at %s PORT", config.Port)
+	log.Printf("Mongodb started at %s PORT", config.Port)
 	return err
 }
