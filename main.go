@@ -22,10 +22,11 @@ func main() {
 	router := mux.NewRouter()
 	//Simple ping API
 	router.HandleFunc("/cart/ping", api.Get.PingHandler).Methods("GET")
-	router.HandleFunc("/cart/", api.Get.GetCartHandler).Methods("GET")
-	router.HandleFunc("/cart/", api.Update.InsertPdtHandler).Methods("PUT")
+	router.HandleFunc("/cart", api.Get.GetCartHandler).Methods("GET")
+	router.HandleFunc("/cart", api.Update.InsertPdtHandler).Methods("PUT")
 	router.HandleFunc("/cart/updateQuantity/{productID}", api.Update.UpdateQuantityHandler).Methods("PUT")
 	router.HandleFunc("/cart/{productID}", api.Delete.DeleteProductHandler).Methods("DELETE")
+	log.Println("Starting the application at port 8000")
 	http.ListenAndServe(":8000", router)
 }
 

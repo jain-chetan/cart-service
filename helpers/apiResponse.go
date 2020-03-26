@@ -1,8 +1,6 @@
 package helpers
 
 import (
-	"log"
-
 	"github.com/jain-chetan/cart-service/model"
 )
 
@@ -12,6 +10,5 @@ func ResponseMapper(code int, message string) model.Response {
 		Code:    code,
 		Message: message,
 	}
-	log.Println(response)
 	return response
 }
