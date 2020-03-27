@@ -12,4 +12,5 @@ var DBClient DBInteractions
 //DBInteractions interface contains database methods
 type DBInteractions interface {
 	DBConnect(config model.DBConfig) error
+	GetCartQuery(string) (model.Cart, error)
 }

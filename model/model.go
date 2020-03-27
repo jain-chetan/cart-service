@@ -11,14 +11,14 @@ type Response struct {
 //Cart structure for cart document
 type Cart struct {
 	ID         primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	UserID     int                `json:"userID" bson:"userID"`
-	GrandTotal float64            `json:"grandTotal" bson:"grandTotal"`
-	Products   Products           `json:"products" bson:"products"`
+	UserID     string/*primitive.ObjectID*/ `json:"userID" bson:"userID"`
+	GrandTotal float64    `json:"grandTotal" bson:"grandTotal"`
+	Products   []Products `json:"products" bson:"products"`
 }
 
 //Products structure for sub-document inside cart document
 type Products struct {
-	ProductID   int     `json:"productID" bson:"productID"`
+	ProductID   string/*primitive.ObjectID*/ `json:"productID" bson:"productID"`
 	ProductName string  `json:"productName" bson:"productName"`
 	Quantity    int     `json:"quantity" bson:"quantity"`
 	SubTotal    float64 `json:"subTotal" bson:"subTotal"`
