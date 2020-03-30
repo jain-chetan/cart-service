@@ -17,7 +17,7 @@ func (g *PutHandler) InsertPdtHandler(w http.ResponseWriter, r *http.Request) {
 	var pingResponse model.Response
 	var product model.Products
 	userID := r.Header.Get("userID")
-
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	body, err := ioutil.ReadAll(r.Body)
 	json.Unmarshal(body, &product)
 
@@ -25,7 +25,7 @@ func (g *PutHandler) InsertPdtHandler(w http.ResponseWriter, r *http.Request) {
 		response := helpers.ResponseMapper(400, "error in getting response")
 		json.NewEncoder(w).Encode(response)
 	}
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+
 	apiResponse, err := http.Get("http://localhost:8000/cart/ping")
 	if err != nil {
 		response := helpers.ResponseMapper(400, "error in getting response")

@@ -32,3 +32,11 @@ type DBConfig struct {
 	DBName   string
 	Port     string
 }
+
+type GrandTotal struct {
+	Total float64 `bson:"grandTotal"`
+}
+
+type Quantity struct {
+	Quantity int `json:"quantity" bson:"quantity"`
+}

@@ -2,25 +2,34 @@ package putHandlers
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/jain-chetan/cart-service/helpers"
+	"github.com/jain-chetan/cart-service/model"
 )
 
 func (g *PutHandler) UpdateQuantityHandler(w http.ResponseWriter, r *http.Request) {
 	userID := r.Header.Get("userID")
 	log.Println(userID)
 
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	var quantity model.Quantity
 	//Get path parameter
 	params := mux.Vars(r)
 	productID := params["productID"]
 	log.Println(productID)
+	body, err := ioutil.ReadAll(r.Body)
+	json.Unmarshal(body, &quantity)
 
+	if err != nil {
+		response := helpers.ResponseMapper(400, "error in getting response")
+		json.NewEncoder(w).Encode(response)
+	}
 	//Call db to update quantity of product
 
 	response := helpers.ResponseMapper(200, "OK")
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	json.NewEncoder(w).Encode(response)
 }
