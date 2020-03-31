@@ -38,5 +38,6 @@ type GrandTotal struct {
 }
 
 type Quantity struct {
-	Quantity int `json:"quantity" bson:"quantity"`
+	Quantity int     `json:"quantity" bson:"quantity"`
+	Price    float64 `json:"price" bson:"price"`
 }

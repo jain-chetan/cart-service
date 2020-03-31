@@ -33,6 +33,7 @@ func (dc *DBRepo) UpdateGrandTotal(userID string) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
 	var totalArr []bson.M
+	//match and group for aggregate method
 	match := bson.D{{"$match", bson.D{{"userID", userID}}}}
 	group := bson.D{{"$project", bson.D{{"grandTotal", bson.D{{"$sum", "$products.subTotal"}}}}}}
 	totalResult, err := collection.Aggregate(ctx, mongo.Pipeline{match, group})

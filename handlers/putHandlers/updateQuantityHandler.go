@@ -8,6 +8,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jain-chetan/cart-service/helpers"
+	"github.com/jain-chetan/cart-service/interfaces"
 	"github.com/jain-chetan/cart-service/model"
 )
 
@@ -17,19 +18,26 @@ func (g *PutHandler) UpdateQuantityHandler(w http.ResponseWriter, r *http.Reques
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	var quantity model.Quantity
+
 	//Get path parameter
 	params := mux.Vars(r)
 	productID := params["productID"]
 	log.Println(productID)
 	body, err := ioutil.ReadAll(r.Body)
 	json.Unmarshal(body, &quantity)
-
 	if err != nil {
 		response := helpers.ResponseMapper(400, "error in getting response")
 		json.NewEncoder(w).Encode(response)
 	}
 	//Call db to update quantity of product
 
-	response := helpers.ResponseMapper(200, "OK")
-	json.NewEncoder(w).Encode(response)
+	err = interfaces.DBClient.UpdateQuantity(userID, productID, quantity.Quantity, quantity.Price)
+	if err != nil {
+		log.Println(err)
+		response := helpers.ResponseMapper(400, "Internal error")
+		json.NewEncoder(w).Encode(response)
+	} else {
+		response := helpers.ResponseMapper(200, "OK")
+		json.NewEncoder(w).Encode(response)
+	}
 }
