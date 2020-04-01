@@ -15,4 +15,5 @@ type DBInteractions interface {
 	GetCartQuery(string) (model.Cart, error)
 	InsertProduct(string, model.Products) error
 	UpdateQuantity(string, string, int, float64) error
+	DeleteProduct(string, string) error
 }

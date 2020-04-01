@@ -3,7 +3,6 @@ package putHandlers
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 
 	"github.com/jain-chetan/cart-service/helpers"
@@ -14,7 +13,6 @@ import (
 type PutHandler struct{}
 
 func (g *PutHandler) InsertPdtHandler(w http.ResponseWriter, r *http.Request) {
-	var pingResponse model.Response
 	var product model.Products
 	userID := r.Header.Get("userID")
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -25,15 +23,16 @@ func (g *PutHandler) InsertPdtHandler(w http.ResponseWriter, r *http.Request) {
 		response := helpers.ResponseMapper(400, "error in getting response")
 		json.NewEncoder(w).Encode(response)
 	}
-
-	apiResponse, err := http.Get("http://localhost:8000/cart/ping")
+	//In case of API call to get product name and product price, use below code
+	/*productResponse, err := http.Get("http://localhost:8000/cart/product" + product.ProductID)
 	if err != nil {
 		response := helpers.ResponseMapper(400, "error in getting response")
 		json.NewEncoder(w).Encode(response)
 	}
-	byteData, _ := ioutil.ReadAll(apiResponse.Body)
-	json.Unmarshal(byteData, &pingResponse)
-	log.Println(pingResponse)
+	byteData, _ := ioutil.ReadAll(productResponse.Body)
+	json.Unmarshal(byteData, &productResponse)
+	err = interfaces.DBClient.InsertProduct(userID, productResponse)
+	*/
 	//Call db to insert Product into cart for the user
 	err = interfaces.DBClient.InsertProduct(userID, product)
 	if err != nil {

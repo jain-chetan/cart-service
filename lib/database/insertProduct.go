@@ -16,7 +16,6 @@ func (dc *DBRepo) InsertProduct(userID string, product model.Products) error {
 	collection := dc.DBClient.Database("local").Collection("cart")
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	filter := bson.M{"userID": userID}
-
 	log.Println(bson.M{"$push": bson.M{"products": product}})
 	_, err = collection.UpdateOne(ctx, filter, bson.M{"$push": bson.M{"products": product}})
 	if err != nil {
@@ -30,8 +29,8 @@ func (dc *DBRepo) InsertProduct(userID string, product model.Products) error {
 func (dc *DBRepo) UpdateGrandTotal(userID string) error {
 	var total model.GrandTotal
 	collection := dc.DBClient.Database("local").Collection("cart")
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 	var totalArr []bson.M
 	//match and group for aggregate method
 	match := bson.D{{"$match", bson.D{{"userID", userID}}}}
@@ -46,5 +45,4 @@ func (dc *DBRepo) UpdateGrandTotal(userID string) error {
 	log.Println("grand total", total.Total)
 	collection.UpdateOne(ctx, bson.M{"userID": userID}, bson.M{"$set": bson.M{"grandTotal": total.Total}})
 	return err
-
 }
