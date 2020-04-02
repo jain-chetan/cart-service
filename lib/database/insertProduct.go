@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"errors"
 	"log"
 	"time"
 
@@ -13,6 +14,9 @@ import (
 
 func (dc *DBRepo) InsertProduct(userID string, product model.Products) error {
 	var err error
+	if dc.GetProductQuery(userID, product.ProductID) {
+		return errors.New("Product Already exists")
+	}
 	collection := dc.DBClient.Database("local").Collection("cart")
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	filter := bson.M{"userID": userID}

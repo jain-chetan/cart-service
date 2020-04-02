@@ -24,17 +24,18 @@ func (dc *DBRepo) GetCartQuery(userID string) (model.Cart, error) {
 }
 
 func (dc *DBRepo) GetProductQuery(userID string, productID string) bool {
-	var cart []model.Cart
+	var cart model.Cart
 	collection := dc.DBClient.Database("local").Collection("cart")
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	cursor, err := collection.Find(ctx, bson.M{"userID": userID, "products.productID": productID})
-	if err != nil {
+	cursor := collection.FindOne(ctx, bson.M{"userID": userID, "products.productID": productID})
+	if err := cursor.Err(); err != nil {
+		log.Println("Check Product Exists", err)
 		return false
 	}
 	cursor.Decode(&cart)
 	log.Println(cart)
-	if len(cart) > 0 {
-		return true
+	if &cart == nil {
+		return false
 	}
-	return false
+	return true
 }
